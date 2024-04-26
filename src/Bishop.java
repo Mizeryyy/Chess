@@ -1,10 +1,4 @@
-// Testing valid moves:
-// Valid move (diagonal up-right): true
-// Valid move (diagonal down-left): true
 
-// Testing invalid moves:
-// Invalid move (horizontal): false
-// Invalid move (vertical): false
 //COMPLETED
 public class Bishop extends ChessPiece {
     public Bishop(String color) {

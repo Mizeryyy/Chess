@@ -1,11 +1,4 @@
-// Testing valid moves:
-// Valid move (horizontal): true
-// Valid move (vertical): true
-// Valid move (diagonal): true
-
-// Testing invalid moves:
-// Invalid move (obstructed): true
-// Invalid move (not diagonal, horizontal, or vertical): false
+//Code from bishop and rook improved
 
 //COMPLETED
 public class Queen extends ChessPiece {

@@ -56,6 +56,14 @@ public class ChessBoard {
         return board;
     }
 
+    public ChessPiece getPieceAt(int row, int col) {
+        return board[row][col];
+    }
+
+    public ChessPiece[][] getBoard() {
+        return this.board;
+    }
+
     public void displayBoard() {
         for (ChessPiece[] row : board) {
             for (ChessPiece piece : row) {
@@ -86,6 +94,10 @@ public class ChessBoard {
         currentPlayer = currentPlayer.equals("white") ? "black" : "white";
     }
 
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     public boolean makeMove(String move) {
 
         int startX = Character.getNumericValue(move.charAt(2));
@@ -101,14 +113,80 @@ public class ChessBoard {
         return true;
     }
 
-    public boolean isCheckmate() {
-        // checkmate detection logic here
+    public boolean isCheck() {
+        // Get the position of the king
+        int kingX = 0;
+        int kingY = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = board[i][j];
+                if (piece != null && piece.getClass().getSimpleName().equals("king")) {
+                    kingX = i;
+                    kingY = j;
+
+                }
+            }
+        }
+        ChessPiece king = board[kingX][kingY];
+        // Iterate through all the squares on the board
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = board[i][j];
+                // Check if the piece belongs to the opponent and if it can move to the king's
+                // position
+                if (piece != null && piece != king && !piece.getColor().equals(king.getColor())
+                        && piece.isValidMove(board, i, j, kingX, kingY)) {
+                    // The king is in check
+                    return true;
+                }
+            }
+        }
+        // The king is not in check
         return false;
+    }
+
+    public boolean isCheckMate() {
+        // Check if the king is in check
+        if (!isCheck()) {
+            return false; // King is not in check, so it's not checkmate
+        }
+
+        // Iterate through all the squares on the board
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = board[i][j];
+                // Check if the piece belongs to the current player and if it's not null
+                if (piece != null && piece.getColor().equals(currentPlayer)) {
+                    // Try moving the piece to all possible positions on the board
+                    for (int x = 0; x < 8; x++) {
+                        for (int y = 0; y < 8; y++) {
+                            // Check if the move is valid
+                            if (piece.isValidMove(board, i, j, x, y)) {
+                                // Make a copy of the board
+                                ChessPiece[][] tempBoard = new ChessPiece[8][8];
+                                for (int k = 0; k < 8; k++) {
+                                    tempBoard[k] = board[k].clone();
+                                }
+                                // Make the move on the copied board
+                                tempBoard[x][y] = tempBoard[i][j];
+                                tempBoard[i][j] = null;
+                                // Check if the king is still in check after the move
+                                if (!isCheck()) {
+                                    return false; // King is not in checkmate
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // King is in checkmate
+        return true;
     }
 
     public void play() {
         Scanner scanner = new Scanner(System.in);
-        while (!isCheckmate()) {
+        while (!isCheckMate()) {
             displayBoard();
             System.out.println(currentPlayer + "'s turn:");
             System.out.print("Enter your move");
@@ -121,11 +199,23 @@ public class ChessBoard {
 
             ChessPiece piece = board[startX][startY];
 
-            if (piece.isValidMove(board, startX, startY, endX, endY) && piece.getColor().equals(currentPlayer)) {
-                makeMove(move);
-                switchPlayer();
+            if (isCheck()) {
+                // If the king is in check, only allow moving the king
+                if (piece instanceof King && piece.isValidMove(board, startX, startY, endX, endY)
+                        && piece.getColor().equals(currentPlayer)) {
+                    makeMove(move);
+                    switchPlayer();
+                } else {
+                    System.out.println("King is in check. You can only move the king.");
+                }
             } else {
-                System.out.println("Invalid move. Try again.");
+                // If the king is not in check, allow moving any piece as usual
+                if (piece.isValidMove(board, startX, startY, endX, endY) && piece.getColor().equals(currentPlayer)) {
+                    makeMove(move);
+                    switchPlayer();
+                } else {
+                    System.out.println("Invalid move. Try again.");
+                }
             }
         }
         System.out.println("Checkmate! " + currentPlayer + " wins!");
