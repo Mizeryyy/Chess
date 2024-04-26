@@ -5,6 +5,7 @@
 // Testing invalid moves:
 // Invalid move (horizontal): false
 // Invalid move (vertical): false
+//COMPLETED
 public class Bishop extends ChessPiece {
     public Bishop(String color) {
         super(color);
@@ -35,10 +36,12 @@ public class Bishop extends ChessPiece {
     }
 
     public static void main(String[] args) {
- 
+
         ChessPiece[][] board = new ChessPiece[8][8];
         Bishop bishop = new Bishop("white");
+        Pawn obstruction = new Pawn("white");
         board[4][4] = bishop; // place the bishop on the board
+        board[7][7] = obstruction;
 
         // Test valid moves
         System.out.println("Testing valid moves:");
@@ -49,5 +52,7 @@ public class Bishop extends ChessPiece {
         System.out.println("\nTesting invalid moves:");
         System.out.println("Invalid move (horizontal): " + bishop.isValidMove(board, 4, 4, 4, 6));
         System.out.println("Invalid move (vertical): " + bishop.isValidMove(board, 4, 4, 2, 4));
+        System.out.println("Valid move (diagonal up-right): " + bishop.isValidMove(board, 4, 4, 7, 7));
+
     }
 }

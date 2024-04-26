@@ -1,40 +1,10 @@
-// Testing valid moves:
-// Valid move (vertical): true
-// Valid move (horizontal): true
 
-// Testing invalid moves:
-// Invalid move (diagonal): false
-// Invalid move (obstructed): true
-
-
-// BUG INVERSE CHECKING CHECKING DOWN TO MOVE LEFT UP
+// COMPLETED
 public class Rook extends ChessPiece {
     public Rook(String color) {
         super(color);
     }
 
-    public void printRow(ChessPiece[][] board, int row) {
-        for (int j = 0; j < board[row].length; j++) {
-            ChessPiece piece = board[row][j];
-            if (piece != null) {
-                String pieceSymbol = piece.getColor().charAt(0) + piece.getClass().getSimpleName().substring(0, 1);
-                System.out.print(String.format("%-3s", pieceSymbol)); // Adjust the width to 3 characters
-            } else {
-                System.out.print(".  "); // Adjust the width to 3 characters
-            }
-        }
-        System.out.println(); // Move to the next line after printing the row
-    }
-    public void printCell(ChessPiece[][] board, int row, int col) {
-        ChessPiece piece = board[row][col];
-        if (piece != null) {
-            String pieceSymbol = piece.getColor().charAt(0) + piece.getClass().getSimpleName().substring(0, 1);
-            System.out.print(String.format("%-3s", pieceSymbol)); // Adjust the width to 3 characters
-        } else {
-            System.out.print(".  "); // Adjust the width to 3 characters
-        }
-    }
-    
     @Override
 
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
@@ -42,17 +12,21 @@ public class Rook extends ChessPiece {
         if (startX < 0 || startX >= 8 || startY < 0 || startY >= 8 || endX < 0 || endX >= 8 || endY < 0 || endY >= 8) {
             return false;
         }
-    
+
         // Rook can move either horizontally or vertically
         if (startX == endX) {
-            
+
             // Moving vertically
             int step = Integer.compare(endY, startY);
-            for (int i = startY+step; i != endY+step; i += step) {
+            System.out.println("Vert");
+            for (int i = startY + step; i != endY + step; i += step) {
+                // System.out.println(i);
+                // System.out.println(startY);
+                // System.out.println(board[startX][i]);
 
-
-                if (board[startY][i] != null) {
-                    if (board[startY][i].getColor().equals(this.color)) {
+                if (board[startX][i] != null) {
+                    if (board[startX][i].getColor().equals(this.color)) {
+                        // System.out.println(this.color + board[startX][i].getColor());
                         return false; // Path blocked by piece of same color
                     }
                 }
@@ -61,13 +35,16 @@ public class Rook extends ChessPiece {
         } else if (startY == endY) {
             // Moving horizontally
             int step = Integer.compare(endX, startX);
-            for (int i = startX + step; i != endX+step; i += step) {
-                printCell(board, startX,i);
+            System.out.println("Horz");
 
+            for (int i = startX + step; i != endX + step; i += step) {
+                // System.out.println(i);
 
-                if (board[i][startX] != null) {
+                if (board[i][startY] != null) {
 
-                    if (board[i][startX].getColor().equals(this.color)) {
+                    if (board[i][startY].getColor().equals(this.color)) {
+                        // System.out.println(this.color + board[startY][i].getColor());
+
                         return false; // Path blocked by piece of same color
 
                     }
@@ -80,21 +57,47 @@ public class Rook extends ChessPiece {
 
     public static void main(String[] args) {
         ChessPiece[][] board = new ChessPiece[8][8];
-        Rook rook = new Rook("white");
+        Rook rook = new Rook("black");
         board[0][0] = rook; // place the rook on the board
-    
+        board[7][3] = rook;
+
         // Place an obstruction on the board
-        ChessPiece obstruction = new Pawn("white"); // Assuming there's a generic chess piece class
-        board[0][4] = obstruction;
+        ChessPiece obstruction = new Pawn("black"); // Assuming there's a generic chess piece class
+        board[0][1] = obstruction;
         board[4][0] = obstruction;
 
-
-        
+        board[7][1] = obstruction;
+        for (ChessPiece[] row : board) {
+            for (ChessPiece piece : row) {
+                if (piece != null) {
+                    String pieceSymbol = piece.getColor().charAt(0) + piece.getClass().getSimpleName().substring(0, 1);
+                    System.out.print(String.format("%-3s", pieceSymbol)); // Adjust the width to 3 characters
+                } else {
+                    System.out.print(".  "); // Adjust the width to 3 characters
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+        // Print the board with piece symbols and coordinates
+        for (int i = 0; i < 8; i++) {
+            // Print coordinates
+            for (int j = 0; j < 8; j++) {
+                System.out.print(i + "," + j + " ");
+            }
+            // Move to the next line after each row
+            System.out.println();
+        }
+        // Print an additional line break for clarity
+        System.out.println();
         // Test valid moves
+
         System.out.println("Testing valid moves:");
+        System.out.println("Valid move (horizontal): " + rook.isValidMove(board, 7, 3, 7, 0));
         System.out.println("Valid move (horizontal): " + rook.isValidMove(board, 0, 0, 3, 0));
-        System.out.println("Valid move (vertical): " + rook.isValidMove(board, 0, 0, 0, 3));
-    
+
+        System.out.println("Valid move (vertical): " + rook.isValidMove(board, 0, 0, 0, 1));
+
         // Test invalid moves
         System.out.println("\nTesting invalid moves:");
         System.out.println("Invalid move (diagonal): " + rook.isValidMove(board, 0, 0, 4, 4));

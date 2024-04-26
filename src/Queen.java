@@ -6,6 +6,8 @@
 // Testing invalid moves:
 // Invalid move (obstructed): true
 // Invalid move (not diagonal, horizontal, or vertical): false
+
+//COMPLETED
 public class Queen extends ChessPiece {
     public Queen(String color) {
         super(color);
@@ -69,6 +71,7 @@ public class Queen extends ChessPiece {
         // Test invalid moves
         System.out.println("\nTesting invalid moves:");
         System.out.println("Invalid move (obstructed): " + queen.isValidMove(board, 4, 4, 6, 6));
-        System.out.println("Invalid move (not diagonal, horizontal, or vertical): " + queen.isValidMove(board, 4, 4, 5, 6));
+        System.out.println(
+                "Invalid move (not diagonal, horizontal, or vertical): " + queen.isValidMove(board, 4, 4, 5, 6));
     }
 }

@@ -2,10 +2,10 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ChessBoard {
     private ChessPiece[][] board;
     private String currentPlayer;
+    public String a;
     private static final Map<Character, ChessPiece> pieceDictionary = new HashMap<>();
 
     static {
@@ -82,70 +82,28 @@ public class ChessBoard {
         System.out.println();
     }
 
-    
-    
-    
-
     public void switchPlayer() {
         currentPlayer = currentPlayer.equals("white") ? "black" : "white";
     }
 
-    public boolean isValidMove(String move) {
-        // Check if the move string has valid format
-        if (move == null || move.length() != 9) {
-            return false;
-        }
-        
-        char pieceSymbol = move.charAt(0);
-        int startX = Character.getNumericValue(move.charAt(2));
-        int startY = Character.getNumericValue(move.charAt(4));
-        int endX = Character.getNumericValue(move.charAt(6));
-        int endY = Character.getNumericValue(move.charAt(8));
-    
-        // Check if the start and end coordinates are within the board boundaries
-        if (startX < 0 || startX >= 8 || startY < 0 || startY >= 8 || endX < 0 || endX >= 8 || endY < 0 || endY >= 8) {
-            return false;
-        }
-    
-        ChessPiece piece = board[startX][startY];
-        // Check if there is a piece at the start position
-        if (piece == null) {
-            return false;
-        }
-    
-        // Check if it's the current player's piece
-        if (!piece.getColor().equals(currentPlayer)) {
-            return false;
-        }
-    
-        // Check if the move is valid for the specific piece
-        return piece.isValidMove(board, startX, startY, endX, endY);
-    }
-    
     public boolean makeMove(String move) {
-        if (!isValidMove(move)) {
-            return false;
-        }
-    
+
         int startX = Character.getNumericValue(move.charAt(2));
         int startY = Character.getNumericValue(move.charAt(4));
         int endX = Character.getNumericValue(move.charAt(6));
         int endY = Character.getNumericValue(move.charAt(8));
-    
+
         // Execute the move
         ChessPiece piece = board[startX][startY];
         board[startX][startY] = null;
         board[endX][endY] = piece;
-    
+
         return true;
     }
-    
-    
-    
 
     public boolean isCheckmate() {
-        //checkmate detection logic here
-        return false; 
+        // checkmate detection logic here
+        return false;
     }
 
     public void play() {
@@ -155,7 +113,15 @@ public class ChessBoard {
             System.out.println(currentPlayer + "'s turn:");
             System.out.print("Enter your move");
             String move = scanner.nextLine();
-            if (isValidMove(move)) {
+
+            int startX = Character.getNumericValue(move.charAt(2));
+            int startY = Character.getNumericValue(move.charAt(4));
+            int endX = Character.getNumericValue(move.charAt(6));
+            int endY = Character.getNumericValue(move.charAt(8));
+
+            ChessPiece piece = board[startX][startY];
+
+            if (piece.isValidMove(board, startX, startY, endX, endY) && piece.getColor().equals(currentPlayer)) {
                 makeMove(move);
                 switchPlayer();
             } else {
