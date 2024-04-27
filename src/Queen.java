@@ -7,8 +7,16 @@ public class Queen extends ChessPiece {
     }
 
     @Override
+    public ChessPiece copyPiece() {
+        return new Queen(this.color); // Return a new instance of Rook with the same color
+    }
+
+    @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
         // check if the movement is horizontal, vertical, or diagonal
+        if (startX == endX && startY == endY) {
+            return false;
+        }
         if ((startX == endX || startY == endY) || Math.abs(endX - startX) == Math.abs(endY - startY)) {
             // check if the path is clear for horizontal movement
             if (startX == endX) {

@@ -4,29 +4,29 @@ public class Rook extends ChessPiece {
     public Rook(String color) {
         super(color);
     }
-
     @Override
-
+    public ChessPiece copyPiece() {
+        return new Rook(this.color); // Return a new instance of Rook with the same color
+    }
+@Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
         // Check if the start and end coordinates are within the board boundaries
         if (startX < 0 || startX >= 8 || startY < 0 || startY >= 8 || endX < 0 || endX >= 8 || endY < 0 || endY >= 8) {
             return false;
         }
-
+    
+        // Check if the start and end positions are the same
+        if (startX == endX && startY == endY) {
+            return false;
+        }
+    
         // Rook can move either horizontally or vertically
         if (startX == endX) {
-
             // Moving vertically
             int step = Integer.compare(endY, startY);
-            System.out.println("Vert");
             for (int i = startY + step; i != endY + step; i += step) {
-                // System.out.println(i);
-                // System.out.println(startY);
-                // System.out.println(board[startX][i]);
-
                 if (board[startX][i] != null) {
                     if (board[startX][i].getColor().equals(this.color)) {
-                        // System.out.println(this.color + board[startX][i].getColor());
                         return false; // Path blocked by piece of same color
                     }
                 }
@@ -35,18 +35,10 @@ public class Rook extends ChessPiece {
         } else if (startY == endY) {
             // Moving horizontally
             int step = Integer.compare(endX, startX);
-            System.out.println("Horz");
-
             for (int i = startX + step; i != endX + step; i += step) {
-                // System.out.println(i);
-
                 if (board[i][startY] != null) {
-
                     if (board[i][startY].getColor().equals(this.color)) {
-                        // System.out.println(this.color + board[startY][i].getColor());
-
                         return false; // Path blocked by piece of same color
-
                     }
                 }
             }
@@ -54,6 +46,7 @@ public class Rook extends ChessPiece {
         }
         return false; // Rook can't move diagonally
     }
+    
 
     public static void main(String[] args) {
         ChessPiece[][] board = new ChessPiece[8][8];
@@ -93,6 +86,8 @@ public class Rook extends ChessPiece {
         // Test valid moves
 
         System.out.println("Testing valid moves:");
+        System.out.println("Valid move (horizontal): " + rook.isValidMove(board, 7, 3, 7, 3));
+
         System.out.println("Valid move (horizontal): " + rook.isValidMove(board, 7, 3, 7, 0));
         System.out.println("Valid move (horizontal): " + rook.isValidMove(board, 0, 0, 3, 0));
 

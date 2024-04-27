@@ -43,6 +43,7 @@ public class ChessGUI extends JFrame {
         addPieceListeners();
 
         setVisible(true);
+        
 
     }
 
@@ -85,11 +86,16 @@ public class ChessGUI extends JFrame {
                         // Check if it's the current player's turn
                         if (boardLogic.getCurrentPlayer().equals(selectedPiece != null ? selectedPiece.getColor() : boardLogic.getCurrentPlayer())) {
                             // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                             ChessPiece piece = boardLogic.getPieceAt(finalI, finalJ);
                             if (piece != null) {
                                 // If a piece is selected, attempt to move it
                                 if (selectedPiece != null) {
                                     // Check if the move is valid
+                                                                // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                                     if (selectedPiece.isValidMove(boardLogic.getBoard(), startX, startY, finalI, finalJ)) {
                                         // Create a copy of the board state before the move
                                         previousBoardState = copyBoardState(boardLogic.getBoard());
@@ -103,10 +109,20 @@ public class ChessGUI extends JFrame {
                                         boardLogic.getBoard()[startX][startY] = null;
     
                                         // Check for check
+                                        if (boardLogic.isCheckMate()) {
+                                            System.out.println("CHECKMATE");
+                                        }
+                                                                    // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                                         if (boardLogic.isCheck(boardLogic.getBoard(), boardLogic.getCurrentPlayer())) {
+                                            if (boardLogic.isCheckMate()) {
+                                                System.out.println("CHECKMATE");
+                                            }
                                             System.out.println("Check!");
                                             selectedPiece = null;
                                             restorePreviousBoardState(); // Restore the previous board state
+                                            checkForCheckMate();
                                             return; // Do not proceed with the move if in check
                                         }
     
@@ -115,6 +131,7 @@ public class ChessGUI extends JFrame {
     
                                         // Switch player turn
                                         boardLogic.switchPlayer();
+                                        checkForCheckMate();
                                     } else {
                                         System.out.println("Invalid move. Try again.");
                                     }
@@ -128,8 +145,14 @@ public class ChessGUI extends JFrame {
                                 }
                             } else {
                                 // If no piece is present, and a piece is selected, attempt to move the selected piece
+                                                            // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                                 if (selectedPiece != null) {
                                     // Check if the move is valid
+                                                                // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                                     if (selectedPiece.isValidMove(boardLogic.getBoard(), startX, startY, finalI, finalJ)) {
                                         // Create a copy of the board state before the move
                                         previousBoardState = copyBoardState(boardLogic.getBoard());
@@ -141,28 +164,45 @@ public class ChessGUI extends JFrame {
                                         // Update the board logic to reflect the move
                                         boardLogic.getBoard()[finalI][finalJ] = selectedPiece;
                                         boardLogic.getBoard()[startX][startY] = null;
-    
+                                // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                                         // Check for check
                                         if (boardLogic.isCheck(boardLogic.getBoard(), boardLogic.getCurrentPlayer())) {
+                                            if (boardLogic.isCheckMate()) {
+                                                System.out.println("CHECKMATE");
+                                            }
                                             System.out.println("Check!");
                                             selectedPiece = null;
                                             restorePreviousBoardState(); // Restore the previous board state
+                                            checkForCheckMate();
                                             return; // Do not proceed with the move if in check
                                         }
     
                                         // Reset selectedPiece
-                                        selectedPiece = null;
     
                                         // Switch player turn
                                         boardLogic.switchPlayer();
+                                        checkForCheckMate();
                                     } else {
+                                                                    // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
+
                                         System.out.println("Invalid move. Try again.");
                                     }
                                 } else {
+                                                                // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                                     System.out.println("No piece selected.");
+
                                 }
                             }
                         } else {
+                                                        // Get the chess piece associated with this square
+checkForCheckMate();
+System.out.println(boardLogic.isCheckMate());
                             // Reset selectedPiece if it's not the player's turn
                             selectedPiece = null;
                             System.out.println("It's not your turn.");
@@ -209,44 +249,15 @@ private void restorePreviousBoardState() {
         }
     }
 }
+// Inside ChessGUI class
 
-private boolean isCheckMate() {
-    // Get the current player's color
-    String currentPlayerColor = boardLogic.getCurrentPlayer();
-
-    // Check if the king is in check
-    if (!boardLogic.isCheck(boardLogic.getBoard(), currentPlayerColor)) {
-        return false;
+private void checkForCheckMate() {
+    if (boardLogic.isCheckMate()) {
+        String winner = boardLogic.getCurrentPlayer().equals("white") ? "Black" : "White";
+        JOptionPane.showMessageDialog(this, "Checkmate! " + winner + " wins!");
+        // You can add additional actions here, such as resetting the game or exiting
     }
-
-    // Iterate through all pieces of the current player
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            ChessPiece piece = boardLogic.getPieceAt(i, j);
-            if (piece != null && piece.getColor().equals(currentPlayerColor)) {
-                // Check if any legal move can get the king out of check
-                for (int x = 0; x < 8; x++) {
-                    for (int y = 0; y < 8; y++) {
-                        if (piece.isValidMove(boardLogic.getBoard(), i, j, x, y)) {
-                            // Simulate the move and check if the king is still in check
-                            ChessPiece[][] tempBoard = copyBoard(boardLogic.getBoard());
-                            tempBoard[x][y] = tempBoard[i][j];
-                            tempBoard[i][j] = null;
-                            if (!boardLogic.isCheck(tempBoard, currentPlayerColor)) {
-                                // If the king is not in check, return false (not checkmate)
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // If no legal move can get the king out of check, it's checkmate
-    return true;
 }
-
 
 
     public static void main(String[] args) {

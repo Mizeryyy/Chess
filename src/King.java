@@ -8,10 +8,16 @@ public class King extends ChessPiece {
     public King(String color) {
         super(color);
     }
-
+    @Override
+    public ChessPiece copyPiece() {
+        return new King(this.color); // Return a new instance of Rook with the same color
+    }
     @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
         // check if the destination is within one square in any direction
+        if (startX == endX && startY == endY) {
+            return false;
+        }
         if (Math.abs(endX - startX) <= 1 && Math.abs(endY - startY) <= 1) {
             // check if the destination square is empty or occupied by an opponent's piece
             if (board[endX][endY] == null || !board[endX][endY].color.equals(this.color)) {

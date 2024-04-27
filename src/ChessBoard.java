@@ -66,18 +66,6 @@ public class ChessBoard {
         return this.board;
     }
 
-    private ChessPiece[][] copyBoard(ChessPiece[][] originalBoard) {
-        ChessPiece[][] copiedBoard = new ChessPiece[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                ChessPiece piece = originalBoard[i][j];
-                if (piece != null) {
-                    copiedBoard[i][j] = piece.copyPiece(); // Assuming ChessPiece has a copyPiece() method
-                }
-            }
-        }
-        return copiedBoard;
-    }
 
     public void displayBoard() {
         for (ChessPiece[] row : board) {
@@ -104,7 +92,33 @@ public class ChessBoard {
         // print an additional line break for clarity
         System.out.println();
     }
-
+    public void displayBoard2(ChessPiece[][] board) {
+        for (ChessPiece[] row : board) {
+            for (ChessPiece piece : row) {
+                if (piece != null) {
+                    String pieceSymbol = piece.getColor().charAt(0) + piece.getClass().getSimpleName().substring(0, 1);
+                    System.out.print(String.format("%-3s", pieceSymbol)); // adjust the width to 3 characters
+                } else {
+                    System.out.print(".  "); // adjust the width to 3 characters
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+        // print the board with piece symbols and coordinates
+        for (int i = 0; i < 8; i++) {
+            // print coordinates
+            for (int j = 0; j < 8; j++) {
+                System.out.print(i + "," + j + " ");
+            }
+            // move to the next line after each row
+            System.out.println();
+        }
+        // print an additional line break for clarity
+        System.out.println();
+    }
+    
+    
     public void switchPlayer() {
         currentPlayer = currentPlayer.equals("white") ? "black" : "white";
     }
@@ -142,12 +156,7 @@ public class ChessBoard {
     }
     
 
-    private void savePreviousBoardState() {
-        // Copy the current board to the previous board
-        for (int i = 0; i < 8; i++) {
-            System.arraycopy(board[i], 0, previousBoard[i], 0, 8);
-        }
-    }
+
 
     public void restorePreviousBoardState() {
         // Restore the previous state of the board
@@ -155,6 +164,86 @@ public class ChessBoard {
             System.arraycopy(previousBoard[i], 0, board[i], 0, 8);
         }
     }
+    public ChessPiece[][] deepCopyBoard(ChessPiece[][] originalBoard) {
+        ChessPiece[][] copiedBoard = new ChessPiece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = originalBoard[i][j];
+                if (piece != null) {
+                    copiedBoard[i][j] = piece.copyPiece(); // Assuming ChessPiece has a copyPiece() method
+                } else {
+                    copiedBoard[i][j] = null;
+                }
+            }
+        }
+        return copiedBoard;
+    }
+    
+    public boolean isCheckMate() {
+        // Get the opposing current player's color
+        String currentPlayerColor = getCurrentPlayer();
+        System.out.println(currentPlayerColor);
+    
+        // Find the position of the current player's king
+        int kingX = -1, kingY = -1;
+        outer:
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = getPieceAt(i, j);
+                if (piece instanceof King && piece.getColor().equals(currentPlayerColor)) {
+                    kingX = i;
+                    kingY = j;
+                    break outer;
+                }
+            }
+        }
+     System.out.println(kingX);
+     System.out.println(kingY);
+        displayBoard();
+        // Check if the king is in check
+
+        // Iterate through all pieces of the current player
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = getPieceAt(i, j);
+                if (piece != null && piece.getColor().equals(currentPlayerColor)) {
+                    // Attempt to move the piece to every square on the board
+                    for (int x = 0; x < 8; x++) {
+                        for (int y = 0; y < 8; y++) {
+                            System.out.println(x);
+                            System.out.println(y);
+                            System.out.println(i);
+                            System.out.println(j);
+                            if (piece.isValidMove(getBoard(), i, j, x, y)) {
+                                // Simulate the move
+                                ChessPiece[][] tempBoard = deepCopyBoard(getBoard());
+                                // Printing the temporary board
+
+                                tempBoard[x][y] = tempBoard[i][j];
+                                tempBoard[i][j] = null;
+                                
+                                ChessPiece[][] tempBoard2 = deepCopyBoard(getBoard());
+
+                                if (!isCheck(tempBoard, currentPlayerColor) && piece.isValidMove(tempBoard2, i, j, x, y)) {
+                                    displayBoard2(tempBoard);
+                                    System.out.println(x);
+                                    System.out.println(y);
+                                    System.out.println(i);
+                                    System.out.println(j);
+                                    System.out.println(piece);
+
+
+                                    return false; // King can escape checkmate by this move
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }return true;
+    }
+    
+    
 
     public boolean isCheck(ChessPiece[][] board, String currentPlayer) {
         int kingX = -1, kingY = -1;

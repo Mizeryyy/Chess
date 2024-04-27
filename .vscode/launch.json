@@ -1,0 +1,70 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Bishop",
+            "request": "launch",
+            "mainClass": "Bishop",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "ChessBoard",
+            "request": "launch",
+            "mainClass": "ChessBoard",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "ChessGUI",
+            "request": "launch",
+            "mainClass": "ChessGUI",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "King",
+            "request": "launch",
+            "mainClass": "King",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "Knight",
+            "request": "launch",
+            "mainClass": "Knight",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "Pawn",
+            "request": "launch",
+            "mainClass": "Pawn",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "Queen",
+            "request": "launch",
+            "mainClass": "Queen",
+            "projectName": "Chess_1e31cf35"
+        },
+        {
+            "type": "java",
+            "name": "Rook",
+            "request": "launch",
+            "mainClass": "Rook",
+            "projectName": "Chess_1e31cf35"
+        }
+    ]
+}

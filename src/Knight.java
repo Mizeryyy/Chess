@@ -3,12 +3,19 @@ public class Knight extends ChessPiece {
     public Knight(String color) {
         super(color);
     }
+    @Override
+    public ChessPiece copyPiece() {
+        return new Knight(this.color); // Return a new instance of Rook with the same color
+    }
 
     @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
         // check if the destination square is reachable by a knight's L-shaped move
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
+        if (startX == endX && startY == endY) {
+            return false;
+        }
         if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
             return false; // not a valid L-shaped move
         }

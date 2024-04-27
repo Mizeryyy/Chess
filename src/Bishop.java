@@ -4,10 +4,17 @@ public class Bishop extends ChessPiece {
     public Bishop(String color) {
         super(color);
     }
+    @Override
+    public ChessPiece copyPiece() {
+        return new Bishop(this.color); // Return a new instance of Rook with the same color
+    }
 
     @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
         // check if the movement is diagonal
+        if (startX == endX && startY == endY) {
+            return false;
+        }
         if (Math.abs(endX - startX) == Math.abs(endY - startY)) {
             // check if the path is clear
             int stepX = (endX - startX) > 0 ? 1 : -1;
@@ -21,6 +28,7 @@ public class Bishop extends ChessPiece {
                 currentX += stepX;
                 currentY += stepY;
             }
+            
             // check if the destination square is empty or occupied by an opponent's piece
             if (board[endX][endY] == null || !board[endX][endY].color.equals(this.color)) {
                 return true;
@@ -33,7 +41,7 @@ public class Bishop extends ChessPiece {
 
         ChessPiece[][] board = new ChessPiece[8][8];
         Bishop bishop = new Bishop("white");
-        Pawn obstruction = new Pawn("white");
+        Pawn obstruction = new Pawn("black");
         board[4][4] = bishop; // place the bishop on the board
         board[7][7] = obstruction;
 
