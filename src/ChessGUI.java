@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.awt.Color;
 public class ChessGUI extends JFrame {
     private JPanel chessBoard;
     private JLabel[][] squares;
@@ -12,7 +12,7 @@ public class ChessGUI extends JFrame {
 
     public ChessGUI() {
         setTitle("Chess Game");
-        setSize(600, 600);
+        setSize(900, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // initialize chessboard
@@ -24,13 +24,17 @@ public class ChessGUI extends JFrame {
 
         // create ChessBoard instance
         boardLogic = new ChessBoard();
+// Define your custom colors using RGB values
+Color color1 = new Color(125, 148, 93); // Red
+Color color2 = new Color(238, 238, 213); // Blue
 
         // populate chessboard
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 JLabel square = new JLabel();
                 square.setOpaque(true);
-                square.setBackground((i + j) % 2 == 0 ? Color.GRAY : Color.DARK_GRAY);
+                // Alternate between color1 and color2 based on the sum of i and j
+                square.setBackground((i + j) % 2 == 0 ? color1 : color2);
                 chessBoard.add(square);
                 squares[i][j] = square;
             }
@@ -51,10 +55,10 @@ public class ChessGUI extends JFrame {
             for (int j = 0; j < 8; j++) {
                 ChessPiece piece = boardLogic.getPieceAt(i, j);
                 if (piece != null) {
-                    String fileName = "assets/" + piece.getClass().getSimpleName().toLowerCase() + "-"
-                            + piece.getColor().substring(0, 1).toLowerCase() + ".png";
-                    int width = 75; // adjust as needed
-                    int height = 75; // adjust as needed
+                    String fileName = "assets/"
+                            + piece.getColor().substring(0, 1).toLowerCase() + "-" + piece.getClass().getSimpleName().toLowerCase()+ ".png";
+                    int width = 110; // adjust as needed
+                    int height = 110; // adjust as needed
                     ImageIcon icon = loadImage(fileName, width, height);
                     if (icon != null) {
                         squares[i][j].setIcon(icon);
@@ -165,8 +169,8 @@ public class ChessGUI extends JFrame {
                     ChessPiece piece = previousBoardState[i][j];
                     String fileName = "assets/" + piece.getClass().getSimpleName().toLowerCase() + "-"
                             + piece.getColor().substring(0, 1).toLowerCase() + ".png";
-                    int width = 75; // adjust as needed
-                    int height = 75; // adjust as needed
+                    int width = 110; // adjust as needed
+                    int height = 110; // adjust as needed
                     ImageIcon icon = loadImage(fileName, width, height);
                     if (icon != null) {
                         squares[i][j].setIcon(icon);
