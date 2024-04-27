@@ -6,19 +6,19 @@ public class Knight extends ChessPiece {
 
     @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
-        // Check if the destination square is reachable by a knight's L-shaped move
+        // check if the destination square is reachable by a knight's L-shaped move
         int deltaX = Math.abs(endX - startX);
         int deltaY = Math.abs(endY - startY);
         if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
-            return false; // Not a valid L-shaped move
+            return false; // not a valid L-shaped move
         }
 
-        // Check if the destination square is empty or occupied by an opponent's piece
+        // check if the destination square is empty or occupied by an opponent's piece
         if (board[endX][endY] != null && board[endX][endY].color.equals(this.color)) {
-            return false; // Destination square occupied by own piece
+            return false; //destination square occupied by own piece
         }
 
-        // Valid move
+        // valid move
         return true;
     }
 

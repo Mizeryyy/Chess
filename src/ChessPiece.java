@@ -13,5 +13,5 @@ public abstract class ChessPiece {
         return color;
 
     }
-
+    public abstract ChessPiece copyPiece();
 }
