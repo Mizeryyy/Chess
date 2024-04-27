@@ -8,7 +8,7 @@ public class Queen extends ChessPiece {
 
     @Override
     public ChessPiece copyPiece() {
-        return new Queen(this.color); // Return a new instance of Rook with the same color
+        return new Queen(this.color); // return a new instance of Rook with the same color
     }
 
     @Override

@@ -1,26 +1,16 @@
-/**
- * Testing valid moves:
- * Valid move (2 squares forward): true
- * Valid move (1 square forward): true
- * Valid move (diagonal capture): false
- * 
- * Testing invalid moves:
- * Invalid move (backward): false
- * Invalid move (sideways): false
- * Invalid move (2 squares forward, obstruction): true
- */
+
 public class Pawn extends ChessPiece {
     public Pawn(String color) {
         super(color);
     }
     @Override
     public ChessPiece copyPiece() {
-        return new Pawn(this.color); // Return a new instance of Rook with the same color
+        return new Pawn(this.color); // return a new instance of Rook with the same color
     }
 
     @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
-        // Check if the pawn is moving forward
+        // pawn is moving forward
         if (startX == endX && startY == endY) {
             return false;
         }
@@ -28,23 +18,23 @@ public class Pawn extends ChessPiece {
         int direction = color.equals("white") ? 1 : -1;
     
         if (endX == startX + direction && board[endX][endY] == null) {
-            // Pawn is moving one square forward
-            return endY == startY; // Pawn cannot move sideways
+            // moving one square forward
+            return endY == startY; // pawn cannot move sideways
         } else if (endX == startX + 2 * direction && startY == endY) {
-            // Pawn is attempting to move two squares forward
+            // attempting to move two squares forward
     
-            // Check if the path is clear for both squares
+            //path is clear for both squares
             if ((color.equals("white") && startX == 1) || (color.equals("black") && startX == 6)
                     && board[endX][endY] == null && board[startX + direction][startY] == null) {
     
-                // Check if the squares in front of the pawn is clear
+                //squares in front of the pawn is clear
                 if (board[startX + direction][startY] == null && board[startX + direction*2][startY] == null) {
-                    return true; // Pawn can move two squares forward
+                    return true; // move two squares forward
                 }
             }
         } else if (Math.abs(endX - startX) == 1 && endY == startY + Integer.compare(endY, startY)
                 && board[endX][endY] != null && !board[endX][endY].color.equals(this.color)) {
-            // Pawn is capturing a piece diagonally
+            //capturing a piece diagonally
             return true;
         }
     

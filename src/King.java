@@ -10,7 +10,7 @@ public class King extends ChessPiece {
     }
     @Override
     public ChessPiece copyPiece() {
-        return new King(this.color); // Return a new instance of Rook with the same color
+        return new King(this.color); // return a new instance of Rook with the same color
     }
     @Override
     public boolean isValidMove(ChessPiece[][] board, int startX, int startY, int endX, int endY) {
@@ -32,7 +32,7 @@ public class King extends ChessPiece {
         ChessPiece[][] board = new ChessPiece[8][8];
         King king = new King("white");
         board[4][4] = king; // place the king on the board
-        ChessPiece obstruction = new Pawn("black"); // Assuming there's a generic chess piece class
+        ChessPiece obstruction = new Pawn("black"); 
         board[3][3] = obstruction;
 
         // Test valid moves
