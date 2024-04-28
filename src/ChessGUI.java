@@ -167,8 +167,8 @@ Color color2 = new Color(238, 238, 213); // Blue
                 } else if (previousBoardState[i][j] != null) {
                     // if there was a piece in the previous state, update its position on the GUI
                     ChessPiece piece = previousBoardState[i][j];
-                    String fileName = "assets/" + piece.getClass().getSimpleName().toLowerCase() + "-"
-                            + piece.getColor().substring(0, 1).toLowerCase() + ".png";
+                    String fileName = "assets/"
+                            + piece.getColor().substring(0, 1).toLowerCase()+ "-" +piece.getClass().getSimpleName().toLowerCase() + ".png";
                     int width = 110; // adjust as needed
                     int height = 110; // adjust as needed
                     ImageIcon icon = loadImage(fileName, width, height);
